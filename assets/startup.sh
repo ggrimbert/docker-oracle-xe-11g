@@ -19,6 +19,9 @@ if [ "$ORACLE_ALLOW_REMOTE" = true ]; then
   echo "alter system disable restricted session;" | sqlplus -s SYSTEM/oracle
 fi
 
+echo "GRANT CONNECT,DBA TO SYSTEM;" | sqlplus -s "SYS/oracle" AS SYSDBA
+echo "GRANT EXECUTE ON dbms_lock TO SYSTEM;" | sqlplus -s "SYS/oracle" AS SYSDBA
+
 for f in /docker-entrypoint-initdb.d/*; do
   case "$f" in
     *.sh)     echo "$0: running $f"; . "$f" ;;
