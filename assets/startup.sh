@@ -22,6 +22,8 @@ fi
 echo "GRANT CONNECT,DBA TO SYSTEM;" | sqlplus -s "SYS/oracle" AS SYSDBA
 echo "GRANT EXECUTE ON dbms_lock TO SYSTEM;" | sqlplus -s "SYS/oracle" AS SYSDBA
 
+echo "DECLARE V_COUNT INTEGER; V_CURSOR_NAME INTEGER; V_RET INTEGER; BEGIN SELECT COUNT(1) INTO V_COUNT FROM ALL_USERS WHERE USERNAME = 'SEQUELIZE'; IF V_COUNT = 0 THEN EXECUTE IMMEDIATE 'CREATE USER sequelize IDENTIFIED BY sequelize DEFAULT TABLESPACE USERS'; EXECUTE IMMEDIATE 'GRANT CONNECT TO sequelize'; EXECUTE IMMEDIATE 'GRANT DBA TO sequelize'; EXECUTE IMMEDIATE 'ALTER USER sequelize QUOTA UNLIMITED ON USERS'; END IF; END;" | sqlplus -s "SYS/oracle" AS SYSDBA
+
 for f in /docker-entrypoint-initdb.d/*; do
   case "$f" in
     *.sh)     echo "$0: running $f"; . "$f" ;;
